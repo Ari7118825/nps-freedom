@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Hays CISD</title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="game-style.css" rel="stylesheet">
+  
+  <link rel="icon" type="image/x-icon" href="https://myapps.classlink.com/favicon.ico">
+</head>
+
+<body>
+    <content>
+		     <button id="../Games/oregon-trail/index.html">
+				Oregon Trail Game
+			</button>    
+			<button id="../Games/wolfenstein/index.html">
+				Wolfenstein
+			</button>    
+	</content>
+
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Find all buttons on the page
+            const buttons = document.querySelectorAll('button');
+
+            // Add a click event listener to each button
+            buttons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    // Get the ID of the clicked button
+                    const url = event.target.id;
+
+                    // Navigate to the URL
+                    window.location.href = url;
+                });
+            });
+		});
+</script>
+</body>
+
+</html>
