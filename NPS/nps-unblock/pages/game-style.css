@@ -90,3 +90,13 @@ iframe  {
 	text-align: left;
 	position: absolute;
 }
+.btn-container  {
+    position: relative;
+}
+.nt-img  {
+    height: 100%;
+    margin-right: 1%;
+}
+#newtab {
+    padding-right: 0%;
+}
