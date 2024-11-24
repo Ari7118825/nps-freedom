@@ -26,6 +26,8 @@ body    {
 #header a   {
     color: darkgray;
     text-decoration: none;
+    position: absolute;
+    text-align: center;
 }
 #main   {
     position: absolute;
@@ -83,7 +85,9 @@ iframe  {
     height: 100%;
     position: absolute;
 }
-#hbtn	{
+#hp-btn	{
+    left: 0%;
 	text-align: left;
 	position: absolute;
+    margin-left: 1%;
 }
