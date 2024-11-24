@@ -8,40 +8,40 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link href="game-style.css" rel="stylesheet">
-  
   <link rel="icon" type="image/x-icon" href="https://myapps.classlink.com/favicon.ico">
+  <link rel="stylesheet" href="game-style.css">
 </head>
 
 <body>
     <content>
-		     <button id="../Games/minecraft/minecraft.html">
-				Minecraft
-			</button>
-			<button id="../Games/Dino-game/index.html">
-				Dino Game
-			</button>
-			<button id="../Games/Google-snake/index.html">
-				Google Snake
-			</button>
+        <div class="btn-container">
+            <button id="minecraft" data-url="../Games/minecraft/minecraft.html">Minecraft</button>
+            <button id="newtab" data-url="../Games/minecraft/minecraft.html" style="position: absolute; top: 0; right: 0; width: 5%; height: 100%; border: none; background: transparent;">
+                <img src="new tab button.png" alt="New Tab" class="nt-img">
+            </button>
+        </div>
     </content>
 
 <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Find all buttons on the page
-            const buttons = document.querySelectorAll('button');
-
-            // Add a click event listener to each button
-            buttons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    // Get the ID of the clicked button
-                    const url = event.target.id;
-
-                    // Navigate to the URL
-                    window.location.href = url;
-                });
+    document.addEventListener('DOMContentLoaded', () => {
+        // Handle normal game button clicks
+        const gameButtons = document.querySelectorAll('button:not([id$="newtab"])');
+        gameButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const url = button.getAttribute('data-url');
+                window.location.href = url; // Navigate to the URL in the same tab
             });
-		});
+        });
+
+        // Handle new tab button clicks
+        const newTabButtons = document.querySelectorAll('button[id$="newtab"]');
+        newTabButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const url = button.getAttribute('data-url');
+                window.open(url, '_blank'); // Open the URL in a new tab
+            });
+        });
+    });
 </script>
 </body>
 
