@@ -4,7 +4,6 @@
 <head>
   <meta charset="utf-8">
   <title>Learn to Fly Idle</title>
-
   <meta name="author" content="">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,10 +12,19 @@
   <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
 
   <style>
-    /* Fullscreen game container */
+    /* Make the body take up the full height and remove margins */
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden; /* Prevent scrolling */
 
+    }
+
+    /* Fullscreen game container */
     #game-container {
-      position: absolute;
+      position: fixed;
+Hide quoted text
+
       top: 0;
       left: 0;
       width: 100%;
@@ -28,7 +36,6 @@
 
 <body>
   <!-- Game container to hold the SWF file -->
-
   <div id="game-container"></div>
 
   <script>
@@ -44,11 +51,9 @@
       }
      
       // Get the game container where the SWF will be placed
-
       const gameContainer = document.getElementById('game-container');
      
       // Ensure the container is empty before loading the new game
-
       gameContainer.innerHTML = '';
 
       // Create a new Ruffle player
