@@ -15,11 +15,15 @@
   <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
 
   <style>
+    /* Hide all other content when the game is launched */
     body.game-active * {
       display: none;
     }
 
+    /* Initially hide the game container */
     #game-container {
+      display: none;
+
       position: absolute;
       top: 0;
       left: 0;
@@ -28,46 +32,72 @@
       background-color: #000;
     }
   </style>
-
 </head>
 
 <body>
     <content>
         <div class="btn-container">
-            <button id="learn-to-fly-idle" data-url="../Games/secure_LearnToFlyIdle.swf">Learn to Fly Idle</button>
-            <button id="newtab" data-url="../Games/secure_LearnToFlyIdle.swf" style="position: absolute; top: 0; right: 0; width: 5%; height: 100%; border: none; background: transparent;">
+            <!-- Game Button -->
 
+            <button id="learn-to-fly-idle" data-url="../Games/secure_LearnToFlyIdle.swf">Learn to Fly Idle</button>
+           
+            <!-- New Tab Button (Optional) -->
+
+            <button id="newtab" data-url="../Games/secure_LearnToFlyIdle.swf" style="position: absolute; top: 0; right: 0; width: 5%; height: 100%; border: none; background: transparent;">
                 <img src="new tab button.png" alt="New Tab" class="nt-img">
             </button>
         </div>
     </content>
 
-    <div id="game-container"></div>
+    <!-- Game Container (This will become the full page player when activated) -->
 
+    <div id="game-container"></div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const ruffle = window.RufflePlayer.newest(); // Initialize Ruffle player
         const gameContainer = document.getElementById('game-container'); // Container for the SWF
 
+        // Check if Ruffle is loaded
+        if (!ruffle) {
+            console.error('Ruffle is not loaded correctly.');
+            alert('Ruffle player is not available.');
+            return;
+        }
+
+        // Handle game button clicks
+
         const gameButtons = document.querySelectorAll('button:not([id$="newtab"])');
         gameButtons.forEach(button => {
             button.addEventListener('click', (event) => {
                 const url = button.getAttribute('data-url');
 
+                // Check if the URL ends with .swf (indicating it's a SWF file)
+
                 if (url && url.endsWith('.swf')) {
+                    // Hide all elements on the page
                     document.body.classList.add('game-active');
-                   
+
+                    // Show the game container
+                    gameContainer.style.display = 'block';
+
+                    // Clear the game container before loading the new game
+                    gameContainer.innerHTML = '';
+
+                    // Create a new Ruffle player instance and load the SWF
+
                     const player = ruffle.createPlayer();
                     gameContainer.appendChild(player);
-                    player.load(url);
+                    player.load(url); // Load the SWF file into the player
                 } else {
+                    // If it's not a .swf file, navigate to the URL in the same tab
+
                     window.location.href = url;
                 }
             });
         });
 
-
+        // Handle new tab button clicks
         const newTabButtons = document.querySelectorAll('button[id$="newtab"]');
         newTabButtons.forEach(button => {
             button.addEventListener('click', (event) => {
