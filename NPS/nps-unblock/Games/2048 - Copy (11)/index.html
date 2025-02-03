@@ -1,80 +1,86 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <title>Game Loader</title>
-  <meta name="author" content="">
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Ruffle Import -->
-  <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
-
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      overflow: hidden;
-    }
-
-    #game-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #000;
-    }
-
-    ruffle-player {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
-</head>
-
-<body>
-  <div id="game-container"></div>
-
-  <script>
-    // Function to dynamically detect the SWF file
-    window.addEventListener('load', function() {
+<script>
+  (async function() {
+    const loader = document.getElementById('loader');
+    const errorDiv = document.getElementById('error-message');
+    
+    try {
+      loader.style.display = 'block';
       const ruffle = window.RufflePlayer.newest();
-      if (!ruffle) {
-        console.error("Ruffle did not load properly.");
-        return;
-      }
-
-      const gameContainer = document.getElementById('game-container');
-      gameContainer.innerHTML = '';
+      if (!ruffle) throw new Error('Ruffle failed to load');
 
       const player = ruffle.createPlayer();
-      gameContainer.appendChild(player);
+      document.getElementById('game-container').appendChild(player);
 
-      // Automatically find the SWF file in the current directory
-      const currentPath = window.location.pathname;
-      const folderPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
+      // DIRECT LOAD FOR TESTING - UNCOMMENT THIS
+      // await player.load("2048.swf");
+      // loader.style.display = 'none';
+      // return;
+
+      const swfFile = await detectSWF();
+      console.log("Selected SWF file:", swfFile);
       
-      fetch(folderPath)
-        .then(response => response.text())
-        .then(html => {
-          // Extract file names using a DOM parser
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, 'text/html');
-          const links = Array.from(doc.querySelectorAll('a'));
-          const swfFile = links.find(link => link.href.endsWith('.swf'));
+      if (!swfFile) throw new Error('No SWF found');
+      
+      player.addEventListener('loaded', () => {
+        console.log("SWF loaded successfully");
+        loader.style.display = 'none';
+      });
 
-          if (swfFile) {
-            const swfFileName = swfFile.href.split('/').pop();
-            player.load(swfFileName);
-          } else {
-            console.error("No SWF file found in the current directory.");
-          }
-        })
-        .catch(error => console.error("Error fetching folder contents:", error));
-    });
-  </script>
-</body>
+      await player.load(swfFile);
+    } catch (error) {
+      console.error("Loading failed:", error);
+      loader.style.display = 'none';
+      errorDiv.textContent = `Error: ${error.message}`;
+      errorDiv.style.display = 'block';
+    }
+  })();
 
-</html>
+  async function detectSWF() {
+    console.log("Starting detection...");
+    
+    // Method 1: URL Parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('swf')) {
+      console.log("Found URL parameter SWF");
+      return urlParams.get('swf');
+    }
+
+    // Method 2: Directory Listing
+    try {
+      console.log("Attempting directory listing...");
+      const response = await fetch(window.location.href);
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const swfLinks = Array.from(doc.querySelectorAll('a'))
+        .map(a => a.href)
+        .filter(href => href.endsWith('.swf'));
+      
+      console.log("Found SWF links:", swfLinks);
+      
+      if (swfLinks.length > 0) {
+        console.log("Using directory listing SWF");
+        return swfLinks[0];
+      }
+    } catch (error) {
+      console.warn("Directory listing failed:", error);
+    }
+
+    // Method 3: Common Names
+    console.log("Trying common filenames...");
+    const commonNames = ['2048.swf', 'game.swf', 'main.swf'];
+    for (const name of commonNames) {
+      try {
+        console.log("Checking for:", name);
+        const response = await fetch(name);
+        if (response.ok) {
+          console.log("Found common name SWF:", name);
+          return name;
+        }
+      } catch (e) {
+        console.log("Failed to load:", name);
+      }
+    }
+
+    return null;
+  }
+</script>
