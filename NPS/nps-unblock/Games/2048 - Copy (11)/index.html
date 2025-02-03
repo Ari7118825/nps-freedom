@@ -1,86 +1,75 @@
-<script>
-  (async function() {
-    const loader = document.getElementById('loader');
-    const errorDiv = document.getElementById('error-message');
-    
-    try {
-      loader.style.display = 'block';
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Learn to Fly</title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Ruffle Import -->
+  <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+
+  <style>
+    /* Make the body take up the full height and remove margins */
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden; /* Prevent scrolling */
+
+    }
+
+    /* Fullscreen game container */
+    #game-container {
+      position: fixed;
+
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+    }
+    ruffle-player {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Game container to hold the SWF file -->
+  <div id="game-container"></div>
+
+  <script>
+    // When the page loads, initialize Ruffle and load the SWF file
+    window.addEventListener('load', function() {
+      // Create an instance of the Ruffle player
       const ruffle = window.RufflePlayer.newest();
-      if (!ruffle) throw new Error('Ruffle failed to load');
+     
+      // Check if Ruffle was loaded correctly
+      if (!ruffle) {
+        console.error("Ruffle did not load properly.");
+        return;
+      }
+     
+      // Get the game container where the SWF will be placed
+      const gameContainer = document.getElementById('game-container');
+     
+      // Ensure the container is empty before loading the new game
+      gameContainer.innerHTML = '';
 
+      // Create a new Ruffle player
       const player = ruffle.createPlayer();
-      document.getElementById('game-container').appendChild(player);
+     
+      // Append the player to the container
+      gameContainer.appendChild(player);
 
-      // DIRECT LOAD FOR TESTING - UNCOMMENT THIS
-      // await player.load("2048.swf");
-      // loader.style.display = 'none';
-      // return;
+      // Load the SWF file into the Ruffle player (change the path if necessary)
+      player.load('Learn_To-Fly.swf');
+    });
+  </script>
 
-      const swfFile = await detectSWF();
-      console.log("Selected SWF file:", swfFile);
-      
-      if (!swfFile) throw new Error('No SWF found');
-      
-      player.addEventListener('loaded', () => {
-        console.log("SWF loaded successfully");
-        loader.style.display = 'none';
-      });
+</body>
 
-      await player.load(swfFile);
-    } catch (error) {
-      console.error("Loading failed:", error);
-      loader.style.display = 'none';
-      errorDiv.textContent = `Error: ${error.message}`;
-      errorDiv.style.display = 'block';
-    }
-  })();
-
-  async function detectSWF() {
-    console.log("Starting detection...");
-    
-    // Method 1: URL Parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('swf')) {
-      console.log("Found URL parameter SWF");
-      return urlParams.get('swf');
-    }
-
-    // Method 2: Directory Listing
-    try {
-      console.log("Attempting directory listing...");
-      const response = await fetch(window.location.href);
-      const html = await response.text();
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const swfLinks = Array.from(doc.querySelectorAll('a'))
-        .map(a => a.href)
-        .filter(href => href.endsWith('.swf'));
-      
-      console.log("Found SWF links:", swfLinks);
-      
-      if (swfLinks.length > 0) {
-        console.log("Using directory listing SWF");
-        return swfLinks[0];
-      }
-    } catch (error) {
-      console.warn("Directory listing failed:", error);
-    }
-
-    // Method 3: Common Names
-    console.log("Trying common filenames...");
-    const commonNames = ['2048.swf', 'game.swf', 'main.swf'];
-    for (const name of commonNames) {
-      try {
-        console.log("Checking for:", name);
-        const response = await fetch(name);
-        if (response.ok) {
-          console.log("Found common name SWF:", name);
-          return name;
-        }
-      } catch (e) {
-        console.log("Failed to load:", name);
-      }
-    }
-
-    return null;
-  }
-</script>
+</html>
