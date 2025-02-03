@@ -11,7 +11,7 @@ You can do this by clicking the green "Code" button and clicking "Download ZIP"
 Once the file finishs downloading you need to unzip the package so open file manager on your computer and unzip the file
 A folder called NPS will now be availible
 
-Get you USB stick of choice minimum of 512Mb and move the folder onto the USB stick
+Get you USB stick of choice minimum of 4Gb and move the folder onto the USB stick
 
 # Using the offline website
 To use the offline website from a USB stick you need to plug it into a computer and then go into files and go to the USB
