@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>NPS | Homepage</title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="style.css" rel="stylesheet">
+  
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+</head>
+
+<body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var buttons = document.querySelectorAll('button');
+        var iframe = document.getElementById('iframeDisplay');
+
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var url = button.id;
+				window.location.href = url;
+            });
+        });
+    });
+</script>
+    <content>
+    
+    <div id="header">
+        <h1 id="headerb">
+            NPS Freedom
+        </h1>
+    </div>
+    
+    <div id="main">
+        <div id="sidebar">
+            <h1>
+                Links
+            </h1>
+            <button id="pages/goals.html">
+				More Info
+			</button>
+			<a href="../nps-unblock/index.html">
+				<button>
+					Unblocked Index
+				</button>
+			</a>
+		</div>
+        <div id="content">
+			<h1 id="header"> 
+				Our Services
+			</h1>
+			<br><br><br><br>
+			<h2>
+				Our Unblocked Index
+			</h2>
+			<p>
+				This is a webpage that has a catalog of movies and html games, this website is 100% unblockable due to it being self hosted.<br>
+				Don't get me wrong the weblink and DNS can get blocked but due to this website being availible on GitHub means you can download it to a usb stick and plug that into a computer and run the website off of that.<br>
+				The movies technnically can be blocked but it would be incredibly hard to and or it would shut down the core mechanics of the system if they blocked it.<br>
+				This is because the movies are hosted on OneDrive which is the core component of many companies.
+			</p>
+			<p>
+				If you want to get the offline version so that way you can unblock it if the website has been blocked then visit this website<br><a href="">(The website is currently down)</a><br>and follow the instructions there
+        </div>
+        
+    </div>
+    </content>
+</body>
+
+</html>
